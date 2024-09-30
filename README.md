@@ -18,10 +18,10 @@
 5. Github Release 中会保留目前能够使用的**所有版本**，但强烈推荐使用**最新版**
 
 ## 下载地址
-1. Github (首选): [https://github.com/SpaceTimee/Bot-CealingCat/releases](https://github.com/SpaceTimee/Bot-CealingCat/releases)
+Github: [https://github.com/SpaceTimee/Bot-CealingCat/releases](https://github.com/SpaceTimee/Bot-CealingCat/releases)
 
 ## 安装方式
-1. Zip 压缩包 (免安装): 下载 Bot SimuCat Zip.zip 并解压 -> 完成后即可直接使用
+Zip 压缩包: 下载 Bot SimuCat Zip.zip 并解压 -> 完成后即可直接使用
 
 ## 食用文档
 **[Bot CealingCat Documentation](https://github.com/SpaceTimee/Bot-CealingCat/wiki/Bot-CealingCat-Documentation)**
