@@ -33,7 +33,7 @@ Zip 压缩包: 下载 Bot SimuCat Zip.zip 并解压 -> 完成后即可直接使�
 **Space Time**
 
 ## 联系方式
-1. **QQ 群 (主群): 716266896，338919498**
+1. **QQ 群 (主群): 1034315671，716266896，338919498**
 2. TG 群 (分群): [PixCealerChat](https://t.me/PixCealerChat)
 3. **邮箱: Zeus6_6@163.com**
 
