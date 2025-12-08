@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -22,23 +23,32 @@ public class Webhook(TelegramBotClient bot, HttpClient client, ILogger<Webhook> 
         Update? update = await request.ReadFromJsonAsync<Update>(JsonBotAPI.Options);
 
         if (update == null)
-            return OnError(null, new Exception("Update is null"));
+        {
+            OnError(new Exception("Update is null"));
+            return new OkResult();
+        }
 
         if (update.Type == UpdateType.Message)
         {
             if (update.Message == null)
-                return OnError(null, new Exception("Message is null"));
+            {
+                OnError(new Exception("Message is null"));
+                return new OkResult();
+            }
 
             try { await OnMessage(update.Message); }
-            catch (Exception ex) { return OnError(update.Message.Chat, ex); }
+            catch (Exception ex) { OnError(ex); }
         }
         else if (update.Type == UpdateType.CallbackQuery)
         {
             if (update.CallbackQuery == null || update.CallbackQuery.Message == null)
-                return OnError(null, new Exception("Callback is null"));
+            {
+                OnError(new Exception("Callback is null"));
+                return new OkResult();
+            }
 
             try { await OnUpdate(update.CallbackQuery); }
-            catch (Exception ex) { return OnError(update.CallbackQuery.Message.Chat, ex); }
+            catch (Exception ex) { OnError(ex); }
         }
 
         return new OkResult();
@@ -64,7 +74,8 @@ public class Webhook(TelegramBotClient bot, HttpClient client, ILogger<Webhook> 
                 return;
             }
 
-            await bot.SendMessage(message.Chat, (await client.GetStringAsync($"api/generate?domain={Uri.EscapeDataString(generateDomain)}")).Replace('我', '喵'), replyMarkup: DeleteButton);
+            try { await bot.SendMessage(message.Chat, await client.GetStringAsync($"api/generate?domain={Uri.EscapeDataString(generateDomain)}"), replyMarkup: DeleteButton); }
+            catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.InternalServerError) { await bot.SendMessage(message.Chat, "生成失败喵 ×", replyMarkup: DeleteButton); }
         }
         else if (message.Text.StartsWith("/search"))
         {
@@ -76,12 +87,13 @@ public class Webhook(TelegramBotClient bot, HttpClient client, ILogger<Webhook> 
                 return;
             }
 
-            await bot.SendMessage(message.Chat, (await client.GetStringAsync($"api/search?domain={Uri.EscapeDataString(searchDomain)}")).Replace('哦', '喵'), replyMarkup: DeleteButton);
+            try { await bot.SendMessage(message.Chat, await client.GetStringAsync($"api/search?domain={Uri.EscapeDataString(searchDomain)}"), replyMarkup: DeleteButton); }
+            catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound) { await bot.SendMessage(message.Chat, "没有找着喵 ×", replyMarkup: DeleteButton); }
         }
         else if (message.Text.StartsWith("/check"))
             await bot.SendMessage(message.Chat, await client.GetStringAsync("api/check"), replyMarkup: DeleteButton);
         else if (message.Text.StartsWith("/download"))
-            await bot.SendDocument(message.Chat, $"{Environment.GetEnvironmentVariable("BACKEND_API_URL")}/files/Cealing-Host.json", replyMarkup: DeleteButton);
+            await bot.SendDocument(message.Chat, $"{Environment.GetEnvironmentVariable("API_URL")}/files/Cealing-Host.json", replyMarkup: DeleteButton);
         else if (message.Text.StartsWith("/meow"))
             await bot.SendMessage(message.Chat, "喵 ~", replyMarkup: DeleteButton);
         else
@@ -90,24 +102,13 @@ public class Webhook(TelegramBotClient bot, HttpClient client, ILogger<Webhook> 
 
     private async Task OnUpdate(CallbackQuery callback)
     {
-        if (callback.Message == null)
-            return;
-
         if (callback.Data == "Del")
-            await bot.DeleteMessage(callback.Message.Chat, callback.Message.MessageId);
+            await bot.DeleteMessage(callback.Message!.Chat, callback.Message.MessageId);
         else
-            await bot.SendMessage(callback.Message.Chat, "喵 ?", replyMarkup: DeleteButton);
+            await bot.SendMessage(callback.Message!.Chat, "喵 ?", replyMarkup: DeleteButton);
 
         await bot.AnswerCallbackQuery(callback.Id);
     }
 
-    private StatusCodeResult OnError(Chat? chat, Exception exception)
-    {
-        if (chat != null)
-            bot.SendMessage(chat, "失败喵 ×");
-
-        logger.LogError(exception, "失败喵");
-
-        return new StatusCodeResult(500);
-    }
+    private void OnError(Exception exception) => logger.LogError(exception, "错误喵 ×");
 }
