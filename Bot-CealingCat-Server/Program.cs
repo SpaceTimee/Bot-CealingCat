@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

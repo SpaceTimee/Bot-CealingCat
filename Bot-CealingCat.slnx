@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Bot-CealingCat-Client/Bot-CealingCat-Client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="Bot-CealingCat-Server/Bot-CealingCat-Server.csproj" />
+</Solution>

@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
     <AzureFunctionsVersion>v4</AzureFunctionsVersion>
-    <RootNamespace>Bot_CealingCat</RootNamespace>
+    <RootNamespace>Bot_CealingCat_Server</RootNamespace>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <NoWin32Manifest>true</NoWin32Manifest>
@@ -20,10 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove=".gitattributes" />
     <None Remove=".gitignore" />
     <None Remove="Bot-CealingCat-Logo.ico" />
-    <None Remove="README.md" />
   </ItemGroup>
 
   <ItemGroup>

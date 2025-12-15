@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <PackageJsonPrivate Condition="$(PackageJsonPrivate) == ''">true</PackageJsonPrivate>
+    <PackageJsonEnginesNode Condition="$(PackageJsonEnginesNode) == ''">^20.19.0 || &gt;=22.12.0</PackageJsonEnginesNode>
+    <PackageJsonScriptsDev Condition="$(PackageJsonScriptsDev) == ''">vite</PackageJsonScriptsDev>
+    <PackageJsonScriptsBuild Condition="$(PackageJsonScriptsBuild) == ''">run-p type-check "build-only {@}" --</PackageJsonScriptsBuild>
+    <PackageJsonScriptsPreview Condition="$(PackageJsonScriptsPreview) == ''">vite preview</PackageJsonScriptsPreview>
+    <PackageJsonScriptsBuildOnly Condition="$(PackageJsonScriptsBuildOnly) == ''">vite build</PackageJsonScriptsBuildOnly>
+    <PackageJsonScriptsTypeCheck Condition="$(PackageJsonScriptsTypeCheck) == ''">vue-tsc --build</PackageJsonScriptsTypeCheck>
+    <PackageJsonScriptsLint Condition="$(PackageJsonScriptsLint) == ''">eslint . --fix</PackageJsonScriptsLint>
+    <PackageJsonScriptsFormat Condition="$(PackageJsonScriptsFormat) == ''">prettier --write src/</PackageJsonScriptsFormat>
+    <PackageJsonDependenciesVue Condition="$(PackageJsonDependenciesVue) == ''">^3.5.25</PackageJsonDependenciesVue>
+    <PackageJsonDevdependenciesTsconfigNode24 Condition="$(PackageJsonDevdependenciesTsconfigNode24) == ''">^24.0.3</PackageJsonDevdependenciesTsconfigNode24>
+    <PackageJsonDevdependenciesTypesNode Condition="$(PackageJsonDevdependenciesTypesNode) == ''">^24.10.4</PackageJsonDevdependenciesTypesNode>
+    <PackageJsonDevdependenciesVitejsPluginVue Condition="$(PackageJsonDevdependenciesVitejsPluginVue) == ''">^6.0.3</PackageJsonDevdependenciesVitejsPluginVue>
+    <PackageJsonDevdependenciesVueEslintConfigPrettier Condition="$(PackageJsonDevdependenciesVueEslintConfigPrettier) == ''">^10.2.0</PackageJsonDevdependenciesVueEslintConfigPrettier>
+    <PackageJsonDevdependenciesVueEslintConfigTypescript Condition="$(PackageJsonDevdependenciesVueEslintConfigTypescript) == ''">^14.6.0</PackageJsonDevdependenciesVueEslintConfigTypescript>
+    <PackageJsonDevdependenciesVueTsconfig Condition="$(PackageJsonDevdependenciesVueTsconfig) == ''">^0.8.1</PackageJsonDevdependenciesVueTsconfig>
+    <PackageJsonDevdependenciesEslint Condition="$(PackageJsonDevdependenciesEslint) == ''">^9.39.2</PackageJsonDevdependenciesEslint>
+    <PackageJsonDevdependenciesEslintPluginVue Condition="$(PackageJsonDevdependenciesEslintPluginVue) == ''">~10.5.1</PackageJsonDevdependenciesEslintPluginVue>
+    <PackageJsonDevdependenciesJiti Condition="$(PackageJsonDevdependenciesJiti) == ''">^2.6.1</PackageJsonDevdependenciesJiti>
+    <PackageJsonDevdependenciesNpmRunAll2 Condition="$(PackageJsonDevdependenciesNpmRunAll2) == ''">^8.0.4</PackageJsonDevdependenciesNpmRunAll2>
+    <PackageJsonDevdependenciesPrettier Condition="$(PackageJsonDevdependenciesPrettier) == ''">^3.7.4</PackageJsonDevdependenciesPrettier>
+    <PackageJsonDevdependenciesTypescript Condition="$(PackageJsonDevdependenciesTypescript) == ''">~5.9.3</PackageJsonDevdependenciesTypescript>
+    <PackageJsonDevdependenciesVite Condition="$(PackageJsonDevdependenciesVite) == ''">^7.3.0</PackageJsonDevdependenciesVite>
+    <PackageJsonDevdependenciesVitePluginVueDevtools Condition="$(PackageJsonDevdependenciesVitePluginVueDevtools) == ''">^8.0.5</PackageJsonDevdependenciesVitePluginVueDevtools>
+    <PackageJsonDevdependenciesVueTsc Condition="$(PackageJsonDevdependenciesVueTsc) == ''">^3.1.8</PackageJsonDevdependenciesVueTsc>
+    <PackageJsonType Condition="$(PackageJsonType) == ''">module</PackageJsonType>
+  </PropertyGroup>
+</Project>

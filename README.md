@@ -3,9 +3,7 @@
 </br>
 
 ## 自我介绍
-**Bot CealingCat**: 一只基于 **WPF(.Net9)** 和 **Azure Functions** 的提供 SNI 伪造相关服务的 Telegram Bot
-
-* 适用平台: Windows x64
+**Bot CealingCat**: 一只基于 **ASP.NET Core (.Net9)** 和 **Azure SWA (Vue3)** 的提供 SNI 伪造相关服务的 Telegram Bot
 
 ## 词汇解释
 **[Sheas Cealer Dictionary](https://github.com/SpaceTimee/Sheas-Cealer/wiki/Sheas-Cealer-Dictionary)**

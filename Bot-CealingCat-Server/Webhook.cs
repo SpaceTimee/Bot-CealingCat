@@ -11,7 +11,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace Bot_CealingCat;
+namespace Bot_CealingCat_Server;
 
 public class Webhook(TelegramBotClient bot, HttpClient client, ILogger<Webhook> logger)
 {
@@ -58,7 +58,9 @@ public class Webhook(TelegramBotClient bot, HttpClient client, ILogger<Webhook> 
     {
         if (string.IsNullOrEmpty(message.Text))
         {
-            await bot.SendMessage(message.Chat, "喵 ?", replyMarkup: DeleteButton);
+            if (message.Type != MessageType.PinnedMessage)
+                await bot.SendMessage(message.Chat, "喵 ?", replyMarkup: DeleteButton);
+
             return;
         }
 
