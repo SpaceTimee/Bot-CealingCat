@@ -9,14 +9,13 @@
     <Nullable>enable</Nullable>
     <NoWin32Manifest>true</NoWin32Manifest>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <ErrorReport>none</ErrorReport>
     <ApplicationIcon>Bot-CealingCat-Logo.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="host.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Update="host.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
