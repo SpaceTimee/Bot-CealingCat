@@ -3,24 +3,27 @@ name: Azure Publish
 on:
   push:
     branches:
-    - master
+    - "**"
   workflow_dispatch:
 
 jobs:
-  publish_app:
+  publish-app:
     name: Publish App
     runs-on: ubuntu-latest
     permissions:
       id-token: write
       contents: read
+
     steps:
       - uses: actions/checkout@v4
+
       - name: Get Id Token
         id: get-id-token
         uses: actions/github-script@v8
         with:
            script: return await core.getIDToken()
            result-encoding: string
+
       - name: Deploy App
         uses: Azure/static-web-apps-deploy@v1
         with:
