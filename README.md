@@ -15,8 +15,9 @@
 4. Bot CealingCat 仍处于**开发阶段**，但每个正式版发布前会尽量确保其**稳定可用**
 5. Github Release 中会保留目前能够使用的**所有版本**，但强烈推荐使用**最新版**
 
-## 下载地址
-Github: [https://github.com/SpaceTimee/Bot-CealingCat/releases](https://github.com/SpaceTimee/Bot-CealingCat/releases)
+## 部署地址
+1. TG Bot: [https://t.me/CealingCatBot](https://t.me/CealingCatBot)
+2. 前端: [https://bot.spacetimee.xyz](https://bot.spacetimee.xyz)
 
 ## 安装方式
 Zip 压缩包: 下载 Bot SimuCat Zip.zip 并解压 -> 完成后即可直接使用
