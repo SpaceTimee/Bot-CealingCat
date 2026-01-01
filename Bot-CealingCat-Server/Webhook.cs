@@ -95,7 +95,7 @@ public class Webhook(TelegramBotClient bot, HttpClient client, ILogger<Webhook> 
         else if (message.Text.StartsWith("/check"))
             await bot.SendMessage(message.Chat, await client.GetStringAsync("api/check"), replyMarkup: DeleteButton);
         else if (message.Text.StartsWith("/download"))
-            await bot.SendDocument(message.Chat, $"{Environment.GetEnvironmentVariable("API_URL")}/files/Cealing-Host.json", replyMarkup: DeleteButton);
+            await bot.SendDocument(message.Chat, $"{Environment.GetEnvironmentVariable("API_URL")}/files", replyMarkup: DeleteButton);
         else if (message.Text.StartsWith("/meow"))
             await bot.SendMessage(message.Chat, "喵 ~", replyMarkup: DeleteButton);
         else
