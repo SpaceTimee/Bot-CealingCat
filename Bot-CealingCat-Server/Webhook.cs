@@ -76,7 +76,7 @@ public class Webhook(TelegramBotClient bot, HttpClient client, ILogger<Webhook> 
                 return;
             }
 
-            try { await bot.SendMessage(message.Chat, await client.GetStringAsync($"api/generate?domain={Uri.EscapeDataString(generateDomain)}"), replyMarkup: DeleteButton); }
+            try { await bot.SendMessage(message.Chat, await client.GetStringAsync($"api/host/generate?domain={Uri.EscapeDataString(generateDomain)}"), replyMarkup: DeleteButton); }
             catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.InternalServerError) { await bot.SendMessage(message.Chat, "生成失败喵 ×", replyMarkup: DeleteButton); }
         }
         else if (message.Text.StartsWith("/search"))
@@ -89,13 +89,13 @@ public class Webhook(TelegramBotClient bot, HttpClient client, ILogger<Webhook> 
                 return;
             }
 
-            try { await bot.SendMessage(message.Chat, await client.GetStringAsync($"api/search?domain={Uri.EscapeDataString(searchDomain)}"), replyMarkup: DeleteButton); }
+            try { await bot.SendMessage(message.Chat, await client.GetStringAsync($"api/host/search?domain={Uri.EscapeDataString(searchDomain)}"), replyMarkup: DeleteButton); }
             catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound) { await bot.SendMessage(message.Chat, "没有找着喵 ×", replyMarkup: DeleteButton); }
         }
         else if (message.Text.StartsWith("/check"))
-            await bot.SendMessage(message.Chat, await client.GetStringAsync("api/check"), replyMarkup: DeleteButton);
+            await bot.SendMessage(message.Chat, await client.GetStringAsync("api/host/check"), replyMarkup: DeleteButton);
         else if (message.Text.StartsWith("/download"))
-            await bot.SendDocument(message.Chat, $"{Environment.GetEnvironmentVariable("API_URL")}/files", replyMarkup: DeleteButton);
+            await bot.SendDocument(message.Chat, $"{Environment.GetEnvironmentVariable("API_URL")}/files/host", replyMarkup: DeleteButton);
         else if (message.Text.StartsWith("/meow"))
             await bot.SendMessage(message.Chat, "喵 ~", replyMarkup: DeleteButton);
         else
