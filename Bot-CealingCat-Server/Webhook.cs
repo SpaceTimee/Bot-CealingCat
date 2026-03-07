@@ -28,28 +28,24 @@ public class Webhook(TelegramBotClient bot, HttpClient client, ILogger<Webhook> 
             return new OkResult();
         }
 
-        if (update.Type == UpdateType.Message)
+        try
         {
-            if (update.Message == null)
+            if (update.Type == UpdateType.Message)
             {
-                OnError(new Exception("Message is null"));
-                return new OkResult();
+                if (update.Message != null)
+                    await OnMessage(update.Message);
+                else
+                    OnError(new Exception("Message is null"));
             }
-
-            try { await OnMessage(update.Message); }
-            catch (Exception ex) { OnError(ex); }
-        }
-        else if (update.Type == UpdateType.CallbackQuery)
-        {
-            if (update.CallbackQuery == null || update.CallbackQuery.Message == null)
+            else if (update.Type == UpdateType.CallbackQuery)
             {
-                OnError(new Exception("Callback is null"));
-                return new OkResult();
+                if (update.CallbackQuery?.Message != null)
+                    await OnUpdate(update.CallbackQuery);
+                else
+                    OnError(new Exception("Callback is null"));
             }
-
-            try { await OnUpdate(update.CallbackQuery); }
-            catch (Exception ex) { OnError(ex); }
         }
+        catch (Exception ex) { OnError(ex); }
 
         return new OkResult();
     }
@@ -64,42 +60,66 @@ public class Webhook(TelegramBotClient bot, HttpClient client, ILogger<Webhook> 
             return;
         }
 
-        if (message.Text.StartsWith("/start"))
-            await bot.SendMessage(message.Chat, "喵 !", replyMarkup: DeleteButton);
-        else if (message.Text.StartsWith("/generate"))
+        string[] parts = message.Text.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
+        string command = parts[0].Replace("@CealingCatBot", string.Empty);
+        string param = parts.Length > 1 ? parts[1].Trim() : string.Empty;
+
+        switch (command)
         {
-            string generateDomain = message.Text.Replace("/generate", string.Empty).Replace("@CealingCatBot", string.Empty).Trim();
+            case "/start":
+                await bot.SendMessage(message.Chat, "喵 !", replyMarkup: DeleteButton);
+                break;
 
-            if (string.IsNullOrEmpty(generateDomain))
-            {
-                await bot.SendMessage(message.Chat, "喵喵喵 ?", replyMarkup: DeleteButton);
-                return;
-            }
+            case "/generate":
+                if (string.IsNullOrEmpty(param))
+                {
+                    await bot.SendMessage(message.Chat, "喵喵喵 ?", replyMarkup: DeleteButton);
+                    return;
+                }
 
-            try { await bot.SendMessage(message.Chat, await client.GetStringAsync($"api/host/generate?domain={Uri.EscapeDataString(generateDomain)}"), replyMarkup: DeleteButton); }
-            catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.InternalServerError) { await bot.SendMessage(message.Chat, "生成失败喵 ×", replyMarkup: DeleteButton); }
+                try
+                {
+                    await bot.SendMessage(message.Chat, await client.GetStringAsync($"api/host/generate?domain={Uri.EscapeDataString(param)}"), replyMarkup: DeleteButton);
+                }
+                catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    await bot.SendMessage(message.Chat, "生成失败喵 ×", replyMarkup: DeleteButton);
+                }
+                break;
+
+            case "/search":
+                if (string.IsNullOrEmpty(param))
+                {
+                    await bot.SendMessage(message.Chat, "喵喵喵 ?", replyMarkup: DeleteButton);
+                    return;
+                }
+
+                try
+                {
+                    await bot.SendMessage(message.Chat, await client.GetStringAsync($"api/host/search?domain={Uri.EscapeDataString(param)}"), replyMarkup: DeleteButton);
+                }
+                catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+                {
+                    await bot.SendMessage(message.Chat, "没有找着喵 ×", replyMarkup: DeleteButton);
+                }
+                break;
+
+            case "/check":
+                await bot.SendMessage(message.Chat, await client.GetStringAsync("api/host/check"), replyMarkup: DeleteButton);
+                break;
+
+            case "/download":
+                await bot.SendDocument(message.Chat, $"{Environment.GetEnvironmentVariable("API_URL")}/files/host", replyMarkup: DeleteButton);
+                break;
+
+            case "/meow":
+                await bot.SendMessage(message.Chat, "喵 ~", replyMarkup: DeleteButton);
+                break;
+
+            default:
+                await bot.SendMessage(message.Chat, "喵 ?", replyMarkup: DeleteButton);
+                break;
         }
-        else if (message.Text.StartsWith("/search"))
-        {
-            string searchDomain = message.Text.Replace("/search", string.Empty).Replace("@CealingCatBot", string.Empty).Trim();
-
-            if (string.IsNullOrEmpty(searchDomain))
-            {
-                await bot.SendMessage(message.Chat, "喵喵喵 ?", replyMarkup: DeleteButton);
-                return;
-            }
-
-            try { await bot.SendMessage(message.Chat, await client.GetStringAsync($"api/host/search?domain={Uri.EscapeDataString(searchDomain)}"), replyMarkup: DeleteButton); }
-            catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound) { await bot.SendMessage(message.Chat, "没有找着喵 ×", replyMarkup: DeleteButton); }
-        }
-        else if (message.Text.StartsWith("/check"))
-            await bot.SendMessage(message.Chat, await client.GetStringAsync("api/host/check"), replyMarkup: DeleteButton);
-        else if (message.Text.StartsWith("/download"))
-            await bot.SendDocument(message.Chat, $"{Environment.GetEnvironmentVariable("API_URL")}/files/host", replyMarkup: DeleteButton);
-        else if (message.Text.StartsWith("/meow"))
-            await bot.SendMessage(message.Chat, "喵 ~", replyMarkup: DeleteButton);
-        else
-            await bot.SendMessage(message.Chat, "喵 ?", replyMarkup: DeleteButton);
     }
 
     private async Task OnUpdate(CallbackQuery callback)
