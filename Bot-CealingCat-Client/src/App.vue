@@ -9,11 +9,11 @@
       <li>下载内置规则 <code>/download</code></li>
       <li>喵~ <code>/meow</code></li>
     </ul>
-    <p>1.0.7 by Space Time</p>
+    <p>1.0.8 by Space Time</p>
   </main>
 </template>
 
-<style scoped>
+<style scoped lang="less">
 h1 {
   text-align: center;
 }
