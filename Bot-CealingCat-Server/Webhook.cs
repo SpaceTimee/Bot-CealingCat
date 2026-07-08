@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -60,7 +62,7 @@ public class Webhook(TelegramBotClient bot, HttpClient client, ILogger<Webhook> 
             return;
         }
 
-        string[] parts = message.Text.Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
+        string[] parts = message.Text.Split([], 2);
         string command = parts[0].Replace("@CealingCatBot", string.Empty);
         string param = parts.Length > 1 ? parts[1].Trim() : string.Empty;
 
@@ -85,6 +87,7 @@ public class Webhook(TelegramBotClient bot, HttpClient client, ILogger<Webhook> 
                 {
                     await bot.SendMessage(message.Chat, "生成失败喵 ×", replyMarkup: DeleteButton);
                 }
+
                 break;
 
             case "/search":
@@ -102,6 +105,7 @@ public class Webhook(TelegramBotClient bot, HttpClient client, ILogger<Webhook> 
                 {
                     await bot.SendMessage(message.Chat, "没有找着喵 ×", replyMarkup: DeleteButton);
                 }
+
                 break;
 
             case "/check":
@@ -117,7 +121,8 @@ public class Webhook(TelegramBotClient bot, HttpClient client, ILogger<Webhook> 
                 break;
 
             default:
-                await bot.SendMessage(message.Chat, "喵 ?", replyMarkup: DeleteButton);
+                string reply = (await (await client.PostAsJsonAsync("api/gateway/chat", new { messages = new[] { new { role = "user", content = $"仅用“喵”字组成一句话回复：{message.Text}" } } })).EnsureSuccessStatusCode().Content.ReadFromJsonAsync<JsonNode>())!["content"]!.GetValue<string>();
+                await bot.SendMessage(message.Chat, reply.Contains("无法") ? "喵 ?" : reply, replyMarkup: DeleteButton);
                 break;
         }
     }
