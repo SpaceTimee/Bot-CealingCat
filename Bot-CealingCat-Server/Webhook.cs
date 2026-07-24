@@ -121,7 +121,8 @@ public class Webhook(TelegramBotClient bot, HttpClient client, ILogger<Webhook> 
                 break;
 
             default:
-                string reply = (await (await client.PostAsJsonAsync("api/gateway/chat", new { messages = new[] { new { role = "user", content = $"仅用“喵”字组成一句话回复：{message.Text}" } } })).EnsureSuccessStatusCode().Content.ReadFromJsonAsync<JsonNode>())!["content"]!.GetValue<string>();
+                HttpResponseMessage response = await client.PostAsJsonAsync("api/provider/chat", new { messages = new[] { new { role = "user", content = $"仅用“喵”字组成一句话回复：{message.Text}" } } });
+                string reply = response.IsSuccessStatusCode ? (await response.Content.ReadFromJsonAsync<JsonNode>())!["content"]!.GetValue<string>() : "喵 ?";
                 await bot.SendMessage(message.Chat, reply.Contains("无法") ? "喵 ?" : reply, replyMarkup: DeleteButton);
                 break;
         }
