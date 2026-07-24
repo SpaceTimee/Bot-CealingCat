@@ -9,7 +9,7 @@
       <li>下载内置规则 <code>/download</code></li>
       <li>喵~ <code>/meow</code></li>
     </ul>
-    <p>1.0.9 by Space Time</p>
+    <p>1.0.10 by Space Time</p>
   </main>
 </template>
 
